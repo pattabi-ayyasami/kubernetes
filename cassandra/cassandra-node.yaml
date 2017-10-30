@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: cassandra-another
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+
+      nodeSelector:
+        kubernetes.io/hostname: ecm155x56.ete.ka.sw.ericsson.se
+
+      containers:
+      - name: cassandra
+        image: vyshane/cassandra
+
+        ports:
+        - containerPort: 7000
+          name: gossip
+        - containerPort: 7001
+          name: tls-intra-node
+        - containerPort: 7199
+          name: jmx
+        - containerPort: 9042
+          name: cql
+
+        env:
+          - name: PEER_DISCOVERY_SERVICE
+            value: cassandra-peers
+
+          - name: CASSANDRA_CLUSTER_NAME
+            value: "Demo"
+          - name: CASSANDRA_DC
+            value: "DC2"
+          - name: CASSANDRA_RACK
+            value: "Rack2"
+          - name: CASSANDRA_ENDPOINT_SNITCH
+            value: GossipingPropertyFileSnitch
+
+        volumeMounts:
+        - name: cassandra-data
+          mountPath: /var/lib/cassandra/data
+
+      volumes:
+        - name: cassandra-data
+          emptyDir: {}

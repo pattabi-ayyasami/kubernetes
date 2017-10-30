@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: camunda
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: do.camunda.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: camunda
+          servicePort: 8080

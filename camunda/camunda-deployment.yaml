@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: camunda
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: camunda
+    spec:
+      nodeSelector:
+          kubernetes.io/hostname: ecm155x57.ete.ka.sw.ericsson.se
+
+      containers:
+      - name: camunda
+        image: camunda/camunda-bpm-platform
+        ports:
+        - name: camunda
+          containerPort: 8080
